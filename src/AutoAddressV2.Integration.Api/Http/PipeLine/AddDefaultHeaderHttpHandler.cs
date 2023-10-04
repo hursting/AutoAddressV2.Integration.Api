@@ -24,6 +24,7 @@ public class AddDefaultHeaderHttpHandler : DelegatingHandler
         _settings = settings;
 
         _authenticationService = authenticationService;
+        
     }
 
 
@@ -38,7 +39,7 @@ public class AddDefaultHeaderHttpHandler : DelegatingHandler
 
             AddApiKeyIfRequired(request, _httpContextAccessor.HttpContext.Request.Path.Value.ToUpper());
 
-            if (request.RequestUri.AbsoluteUri.ToUpper().Contains("GET-TOKEN") == false)
+            if (request.RequestUri.AbsoluteUri.ToUpper().Contains("CREATETOKEN") == false)
             {
                 string token = await _authenticationService.GetAuthenticationToken();
                 
@@ -67,7 +68,6 @@ public class AddDefaultHeaderHttpHandler : DelegatingHandler
             if (request.Headers.Any(x => x.Key.Equals(authorizationKey)) == false)
             {
                 request.Headers.Add(authorizationKey, $"Basic {_settings.Value.HttpClientSettings.ApiKey}");
-                    
             }
         }
 

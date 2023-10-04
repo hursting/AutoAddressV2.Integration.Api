@@ -15,13 +15,13 @@ public class AuthController : ControllerBase
     private const string createTokenEndpoint = "createtoken";
     private const string JsonContentType = "application/json";
 
-    private readonly IHttpClient _httpClient;
+    private readonly IAutoAddressHttpClient _autoAddressHttpClient;
 
-    public AuthController(IOptions<AppSettings> settings, IHttpClient httpClient)
+    public AuthController(IOptions<AppSettings> settings, IAutoAddressHttpClient autoAddressHttpClient)
     {
         _settings = settings;
 
-        _httpClient = httpClient;
+        _autoAddressHttpClient = autoAddressHttpClient;
     }
     
     
@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     {
         var ur = GetRequestUri(_settings.Value.HttpClientSettings.BaseUrl);
 
-        return  await _httpClient.GetResultAsync<GetTokenResponse>(ur.AbsoluteUri.ToString());
+        return  await _autoAddressHttpClient.GetResultAsync<GetTokenResponse>(ur.AbsoluteUri.ToString() + createTokenEndpoint);
         
     }
   

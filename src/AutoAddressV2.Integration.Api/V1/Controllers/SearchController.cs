@@ -9,10 +9,10 @@ namespace AutoAddressV2.Integration.Api.V1.Controllers;
 [Route("api/v{version:apiVersion}/[controller]")]
 public class SearchController : ControllerBase
 {
-    private readonly IHttpClient _httpClient;
+    private readonly IAutoAddressHttpClient _httpClient;
     private const string AutoCompleteEndpoint = "autocomplete";
     
-    public SearchController(IHttpClient httpClient)
+    public SearchController(IAutoAddressHttpClient httpClient)
     {
         _httpClient = httpClient;
     }
@@ -22,11 +22,12 @@ public class SearchController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AutoCompleteResponse>> Get(string address, CancellationToken cancellationToken)
     {
-        var uri = new Uri(_httpClient.GetBaseUrl().AbsoluteUri + AutoCompleteEndpoint + $"?address={address}");
+         var uri = new Uri(_httpClient.GetBaseUrl().AbsoluteUri + AutoCompleteEndpoint + $"?address={address}");
         
         
-        var response = await _httpClient.GetResultAsync<AutoCompleteResponse>(uri.AbsoluteUri);
+         var response = await _httpClient.GetResultAsync<AutoCompleteResponse>(uri.AbsoluteUri);
         return Ok(response);
+        return Ok();
     }
     
     

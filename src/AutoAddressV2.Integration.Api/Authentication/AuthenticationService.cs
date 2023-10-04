@@ -12,14 +12,20 @@ public class AuthenticationService : IProvideAuthentication
     private readonly ICacheStore _cacheStore;
     private const string AuthenticationTokenCacheKey = "AuthenticationToken";
     private readonly IOptions<AppSettings> _settings;
-    private readonly IHttpClient _httpClient;
-    public AuthenticationService(ICacheStore cacheStore,IOptions<AppSettings> settings, IHttpClient httpClient)
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpSerializer _serializer; 
+    
+    public AuthenticationService(ICacheStore cacheStore,IOptions<AppSettings> settings, IHttpClientFactory httpClientFactory, IHttpSerializer serializer  )
     {
         _cacheStore = cacheStore;
 
         _settings = settings;
+        
+        //using httpclientfactory because of issue https://stackoverflow.com/questions/66659795/addhttpclient-fails-with-defaulthttpclientfactory
+        _httpClientFactory = httpClientFactory;
 
-        _httpClient = httpClient;
+        _serializer = serializer;
+
     }
     
     public async Task<string> GetAuthenticationToken()
@@ -33,26 +39,29 @@ public class AuthenticationService : IProvideAuthentication
 
         var authenticatedTokenFromAutoAddress = await GetAuthenticationTokenFromAutoAddressEndpoint();
         
-        
         _cacheStore.Add(authenticatedTokenFromAutoAddress,AuthenticationTokenCacheKey , new TimeSpan(0,0,2,0) );
-
 
         return authenticatedTokenFromAutoAddress;
     }
 
     private async Task<string> GetAuthenticationTokenFromAutoAddressEndpoint()
     {
-        IDictionary<string, string> dic = new Dictionary<string, string>();
+        string authorizationKey = "Authorization";
         
-        dic.Add("Authorization",_settings.Value.HttpClientSettings.ApiKey);
-        
-        _httpClient.SetHeaders(dic);
+        using (var client = _httpClientFactory.CreateClient())
+        {
+            client.DefaultRequestHeaders.Add("User-Agent","PostmanRuntime/7.29.2");
+            client.DefaultRequestHeaders.Add("Host","api.autoaddress.com");
+            client.DefaultRequestHeaders.Add(authorizationKey, $"Basic {_settings.Value.HttpClientSettings.ApiKey}");
 
-        var ur = GetRequestUri(_settings.Value.HttpClientSettings.BaseUrl);
+            var response = await client.GetAsync(_settings.Value.HttpClientSettings.BaseUrl + Constants.EndPoints.GetTokenEndpoint);
 
-        var response = await _httpClient.GetResultAsync<GetTokenResponse>(ur.AbsoluteUri.ToString());
+            var stream = await response.Content.ReadAsStreamAsync();
+            
+            var result =await _serializer.DeserializeAsync<GetTokenResponse>(stream);
 
-        return response.Result.Token;
+            return result.Token;
+        }
     }
     
     private Uri GetRequestUri(string baseAddress)

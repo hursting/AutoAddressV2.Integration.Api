@@ -5,7 +5,7 @@ namespace AutoAddressV2.Integration.Api.Http;
 /// <summary>
 /// <see cref="https://github.com/snatch-dev/Convey"/>
 /// </summary>
-public interface IHttpClient
+public interface IAutoAddressHttpClient
 {
     Uri? GetBaseUrl();
   
