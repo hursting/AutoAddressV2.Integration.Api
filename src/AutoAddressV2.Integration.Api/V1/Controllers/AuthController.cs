@@ -30,35 +30,12 @@ public class AuthController : ControllerBase
     [Route("get-token")]
     public async Task<HttpResult<GetTokenResponse>> GetToken( CancellationToken cancellationToken)
     {
-        
-     
-        IDictionary<string, string> dic = new Dictionary<string, string>();
-        
-        dic.Add("Authorization",_settings.Value.HttpClientSettings.ApiKey);
-        // dic.Add("Host","api.autoaddress.com");
-        // dic.Add("User-Agent","PostmanRuntime/7.29.2");
-        
-        _httpClient.SetHeaders(dic);
-
         var ur = GetRequestUri(_settings.Value.HttpClientSettings.BaseUrl);
-        
+
         return  await _httpClient.GetResultAsync<GetTokenResponse>(ur.AbsoluteUri.ToString());
         
     }
-    private HttpRequestMessage ConfigureHttpMessage(HttpMethod httpMethod, Uri requestUri)
-    {
-        
-        var httpRequestMessage = new HttpRequestMessage(System.Net.Http.HttpMethod.Get, requestUri);
-        httpRequestMessage.Headers.Accept.Clear();
-        httpRequestMessage.Headers.Add("Authorization","Basic cHViXzc2OTQ2Y2U1LWUyZWEtNDY0Ny1hZDQ2LTkxZDNiMDU0ZTBmNzo=");
-        
-        httpRequestMessage.Headers.Add("User-Agent","PostmanRuntime/7.29.2");
-
-        httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(JsonContentType));
-       
-        return httpRequestMessage;
-    }
-
+  
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]

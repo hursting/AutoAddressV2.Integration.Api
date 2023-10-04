@@ -14,12 +14,15 @@ public static class ServiceCollectionExtensions
         
         services.AddSingleton(httpClientOptions);
         services.AddSingleton<IHttpSerializer, SimpleHttpSerializer>();
+        
+        services.AddTransient<AddDefaultHeaderHttpHandler>();
+        
         var clientBuilder = services.AddHttpClient<IHttpClient, AutoAddressHttpClient>(opt =>
         {
             opt.BaseAddress = new Uri(httpClientOptions.BaseUrl);
             opt.Timeout =new TimeSpan(0, 0, httpClientOptions.TimeoutInSeconds);
         }).AddHttpMessageHandler<AddDefaultHeaderHttpHandler>();;
-
+        
         if (httpClientBuilder != null)
         {
             httpClientBuilder.Invoke(clientBuilder);

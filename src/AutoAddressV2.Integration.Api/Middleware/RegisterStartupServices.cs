@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using AutoAddressV2.Integration.Api.Authentication;
 using AutoAddressV2.Integration.Api.Caching;
 using AutoAddressV2.Integration.Api.Configuration;
 using AutoAddressV2.Integration.Api.Http;
@@ -26,6 +27,8 @@ public static class RegisterStartupServices
         builder.Configuration.Bind(appSettings);
 
         builder.Services.Configure<AppSettings>(builder.Configuration);
+        
+        builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddAutoAddressCaching();
         
@@ -40,8 +43,9 @@ public static class RegisterStartupServices
                 new HeaderApiVersionReader("x-api-version"),
                 new MediaTypeApiVersionReader("x-api-version"));
         });
-        
-        
+
+
+        builder.Services.AddTransient<IProvideAuthentication, AuthenticationService>();
         
         
         return builder;
