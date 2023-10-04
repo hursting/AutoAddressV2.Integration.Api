@@ -7,7 +7,7 @@ namespace AutoAddressV2.Integration.Api.Http;
 /// <summary>
 /// <see cref="https://github.com/snatch-dev/Convey"/>
 /// </summary>
-public class AutoAddressHttpClient : IHttpClient
+public class AutoAddressAutoAddressHttpClient : IAutoAddressHttpClient
 {
     
     private const string JsonContentType = "application/json";
@@ -15,7 +15,7 @@ public class AutoAddressHttpClient : IHttpClient
     private readonly HttpClientSettings _settings;
     private readonly IHttpSerializer _serializer;
 
-    public AutoAddressHttpClient(HttpClient httpClient, HttpClientSettings settings, IHttpSerializer serializer)
+    public AutoAddressAutoAddressHttpClient(HttpClient httpClient, HttpClientSettings settings, IHttpSerializer serializer)
     {
         _client = httpClient;
 
