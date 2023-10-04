@@ -7,6 +7,7 @@ namespace AutoAddressV2.Integration.Api.Http;
 /// </summary>
 public interface IHttpClient
 {
+    Uri? GetBaseUrl();
   
     void SetHeaders(IDictionary<string, string> headers);
     

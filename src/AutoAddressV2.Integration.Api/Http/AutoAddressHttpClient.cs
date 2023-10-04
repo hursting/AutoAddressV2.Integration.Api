@@ -26,6 +26,11 @@ public class AutoAddressHttpClient : IHttpClient
         
         
     }
+
+    public Uri? GetBaseUrl()
+    {
+        return _client.BaseAddress;
+    }
     
     
     protected virtual async Task<HttpResult<T>> SendResultAsync<T>(string uri, HttpMethod method,
