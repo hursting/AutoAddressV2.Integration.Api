@@ -6,17 +6,17 @@ using Microsoft.Extensions.Options;
 
 namespace AutoAddressV2.Integration.Api.V1.Controllers;
 
+[ApiController]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class SettingsController : ControllerBase
 {
     private readonly IOptions<AppSettings> _settings;
-    private readonly HttpClient _httpClient;
-    private const string AuthEndpoint = "createtoken";
     
-    public SettingsController(IOptions<AppSettings> settings,  HttpClient httpClient)
+    public SettingsController(IOptions<AppSettings> settings)
     {
         _settings = settings;
-
-        _httpClient = httpClient;
+        
     }
     
     [HttpGet]
@@ -24,9 +24,6 @@ public class SettingsController : ControllerBase
     [Route("get-settings")]
     public IActionResult GetSetting()
     {
-        
-        
-        
         return Ok(_settings.Value.HttpClientSettings.ApiKey);
     }
     

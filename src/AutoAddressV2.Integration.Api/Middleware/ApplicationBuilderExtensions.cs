@@ -14,12 +14,8 @@ public static class ApplicationBuilderExtensions
         app.UseAuthorization();
 
         app.MapControllers();
-
-        //app.UseSerilogRequestLogging();
         
         app.UseMiddleware<ExceptionHandlingMiddleware>();
-        
-        //app.UseMiddleware<HttpHeaderValidationMiddleware>();
         
         return app;
     }
