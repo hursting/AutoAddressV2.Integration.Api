@@ -30,10 +30,6 @@ public class ExceptionHandlingMiddleware
         {
             await _next(httpContext);
         }
-        // catch (AppliedException appliedException)
-        // {
-        //     await HandleBusinessLogicExceptionAsync(httpContext,appliedException);
-        // }
         catch (HttpRequestException httpRequestException)
         {
             _logger.LogError(httpRequestException, "Request Exception");

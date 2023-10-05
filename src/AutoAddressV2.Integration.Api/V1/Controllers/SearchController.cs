@@ -5,12 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AutoAddressV2.Integration.Api.V1.Controllers;
 
+
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class SearchController : ControllerBase
 {
     private readonly IAutoAddressHttpClient _httpClient;
-    private const string AutoCompleteEndpoint = "autocomplete";
+    
     
     public SearchController(IAutoAddressHttpClient httpClient)
     {
@@ -22,12 +24,9 @@ public class SearchController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AutoCompleteResponse>> Get(string address, CancellationToken cancellationToken)
     {
-         var uri = new Uri(_httpClient.GetBaseUrl().AbsoluteUri + AutoCompleteEndpoint + $"?address={address}");
-        
-        
-         var response = await _httpClient.GetResultAsync<AutoCompleteResponse>(uri.AbsoluteUri);
+        var uri = new Uri(_httpClient.GetBaseUrl().AbsoluteUri + Constants.EndPoints.AutoCompleteEndpoint + $"?address={address}");
+        var response = await _httpClient.GetResultAsync<AutoCompleteResponse>(uri.AbsoluteUri);
         return Ok(response);
-        return Ok();
     }
     
     
