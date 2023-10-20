@@ -38,6 +38,7 @@ public class AuthController : ControllerBase
     private Uri GetRequestUri(string baseAddress)
     {
         string requestUri = $"{baseAddress}";
+        
         var builder = new StringBuilder(requestUri);
         
         return new Uri(builder.ToString());

@@ -4,6 +4,7 @@ using AutoAddressV2.Integration.Api.Caching;
 using AutoAddressV2.Integration.Api.Configuration;
 using AutoAddressV2.Integration.Api.Http;
 using AutoAddressV2.Integration.Api.Swagger;
+using AutoAddressV2.Integration.Api.Telemetry;
 using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace AutoAddressV2.Integration.Api.Middleware;
@@ -31,6 +32,8 @@ public static class RegisterStartupServices
         builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddAutoAddressCaching();
+
+        builder.Services.AddAutoAddressTelemetry();
         
         builder.Services.AddAutoAddressHttpClient(builder.Configuration,null);
         
