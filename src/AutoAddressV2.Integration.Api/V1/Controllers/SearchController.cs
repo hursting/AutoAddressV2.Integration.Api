@@ -30,4 +30,19 @@ public class SearchController : ControllerBase
     }
     
     
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<LookupResponse>> Get( [FromQuery] [Required] LookupRequest request, CancellationToken cancellationToken)
+    {
+        var uri = new Uri(_httpClient.GetBaseUrl().AbsoluteUri + Constants.EndPoints.LookupEndpoint + $"?aa3Id={request.Id}&sig={request.Signature}");
+        var response = await _httpClient.GetResultAsync<LookupResponse>(uri.AbsoluteUri);
+        return Ok(response);
+        
+    }
+
+    
+    
+    
+    
 }

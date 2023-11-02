@@ -1,4 +1,4 @@
-﻿namespace AutoAddressV2.Integration.Api.Domain.AutoComplete;
+﻿namespace AutoAddressV2.Integration.Api.Domain;
 
 public class Link
 {
